@@ -1,9 +1,7 @@
 package com.jimmy.monetization.monetizationbackend.entitlement;
 
-import com.jimmy.monetization.monetizationbackend.catalog.Product;
-import com.jimmy.monetization.monetizationbackend.catalog.ProductRepository;
+import com.jimmy.monetization.monetizationbackend.entitlement.dto.EntitlementView;
 import com.jimmy.monetization.monetizationbackend.security.TenantContext;
-import com.jimmy.monetization.monetizationbackend.user.User;
 import com.jimmy.monetization.monetizationbackend.user.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,31 +13,26 @@ public class EntitlementQueryService {
 
     private final EntitlementRepository entitlementRepo;
     private final UserRepository userRepo;
-    private final ProductRepository productRepo;
 
-    public EntitlementQueryService(
-            EntitlementRepository entitlementRepo,
-            UserRepository userRepo,
-            ProductRepository productRepo
-    ) {
+    public EntitlementQueryService(EntitlementRepository entitlementRepo, UserRepository userRepo) {
         this.entitlementRepo = entitlementRepo;
         this.userRepo = userRepo;
-        this.productRepo = productRepo;
     }
 
-    public List<Entitlement> findActiveEntitlements(String externalUserId, String productSku) {
+    public List<EntitlementView> listOwnedSkus(String externalUserId) {
         UUID tenantId = TenantContext.getTenantId();
         if (tenantId == null) throw new IllegalStateException("Missing tenant context");
 
-        User user = userRepo.findByTenantIdAndExternalUserId(tenantId, externalUserId)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown user"));
+        var user = userRepo.findByTenantIdAndExternalUserId(tenantId, externalUserId)
+                .orElse(null);
 
-        Product product = productRepo.findByTenantIdAndSku(tenantId, productSku)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown product"));
+        // MVP choice: unknown user => return empty list (don’t leak info)
+        if (user == null) return List.of();
 
-        return entitlementRepo.findByTenantIdAndUserIdAndProductIdAndStatus(
-                tenantId, user.getId(), product.getId(), EntitlementStatus.ACTIVE
+        return entitlementRepo.findActiveViewsByTenantAndUser(
+                tenantId,
+                user.getId(),
+                EntitlementStatus.ACTIVE
         );
-
     }
 }

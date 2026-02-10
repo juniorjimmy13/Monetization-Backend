@@ -9,4 +9,7 @@ import java.util.UUID;
 public interface EntitlementRepository extends JpaRepository<Entitlement, UUID> {
     Optional<Entitlement> findByOrderId(UUID orderId);
     List<Entitlement> findByTenantIdAndUserId(UUID tenantId, UUID userId);
+    List<Entitlement> findByTenantIdAndUserIdAndProductIdAndStatus(
+            UUID tenantId, UUID userId, UUID productId, EntitlementStatus status
+    );
 }

@@ -24,7 +24,7 @@ public class EntitlementService {
     public void grantForOrder(UUID orderId) {
         System.out.println("GRANTING ENTITLEMENT for orderId=" + orderId);
 
-        // ✅ idempotent: if already granted, do nothing
+        // idempotent: if already granted, do nothing
         if (entitlementRepo.findByOrderId(orderId).isPresent()) return;
 
         Order order = orderRepo.findById(orderId).orElseThrow();

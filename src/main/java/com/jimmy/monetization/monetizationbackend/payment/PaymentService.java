@@ -48,9 +48,14 @@ public class PaymentService {
         attempt.setAmountMinor(order.getTotalMinor());
         attempt.setCurrency(order.getCurrency());
         attempt.setPhoneNumber(req.getPhoneNumber());
+
+// MUST be set before save (NOT NULL)
         attempt.setProviderReference(UUID.randomUUID().toString());
 
-        attemptRepo.save(attempt);
+        attempt = attemptRepo.saveAndFlush(attempt); // now insert is valid + id generated
+
+
+
 
         // Move order into pending payment (retry stays on same order)
         order.setStatus(OrderStatus.PENDING_PAYMENT);

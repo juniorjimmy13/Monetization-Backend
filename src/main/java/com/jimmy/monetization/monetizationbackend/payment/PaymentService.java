@@ -6,8 +6,10 @@ import com.jimmy.monetization.monetizationbackend.order.OrderStatus;
 import com.jimmy.monetization.monetizationbackend.payment.dto.InitiatePaymentRequest;
 import com.jimmy.monetization.monetizationbackend.payment.dto.InitiatePaymentResponse;
 import com.jimmy.monetization.monetizationbackend.security.TenantContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -26,42 +28,46 @@ public class PaymentService {
 
     @Transactional
     public InitiatePaymentResponse initiate(InitiatePaymentRequest req) {
-        if (req.getOrderId() == null) throw new IllegalArgumentException("orderId is required");
+        if (req == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "body is required");
+        if (req.getOrderId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "orderId is required");
         if (req.getPhoneNumber() == null || req.getPhoneNumber().isBlank())
-            throw new IllegalArgumentException("phoneNumber is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "phoneNumber is required");
 
-        var tenantId = TenantContext.getTenantId();
-        if (tenantId == null) throw new IllegalStateException("No tenant in context");
+        UUID tenantId = TenantContext.getTenantId();
+        if (tenantId == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No tenant in context");
 
         Order order = orderRepo.findByIdAndTenantId(req.getOrderId(), tenantId)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
 
-        // Only allow payment initiation if order not already completed
+        // If already completed, stop
         if (order.getStatus() == OrderStatus.COMPLETED || order.getStatus() == OrderStatus.ENTITLEMENT_GRANTED) {
-            throw new IllegalArgumentException("Order already completed");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Order already completed");
         }
 
-        // Create new payment attempt (multiple allowed)
+        // ✅ Retry guard: if latest attempt is still pending, block
+        attemptRepo.findTopByOrderIdOrderByCreatedAtDesc(order.getId()).ifPresent(last -> {
+            if (last.getStatus() == PaymentStatus.PENDING && last.getProcessedAt() == null) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Payment already pending for this order. Wait for callback or timeout.");
+            }
+        });
+
+        // Create new attempt (retry allowed)
         PaymentAttempt attempt = new PaymentAttempt();
         attempt.setOrderId(order.getId());
         attempt.setStatus(PaymentStatus.PENDING);
         attempt.setAmountMinor(order.getTotalMinor());
         attempt.setCurrency(order.getCurrency());
         attempt.setPhoneNumber(req.getPhoneNumber());
+        attempt.setProviderReference(UUID.randomUUID().toString()); // NOT NULL
 
-// MUST be set before save (NOT NULL)
-        attempt.setProviderReference(UUID.randomUUID().toString());
+        attempt = attemptRepo.saveAndFlush(attempt); // ✅ ensures id exists
 
-        attempt = attemptRepo.saveAndFlush(attempt); // now insert is valid + id generated
-
-
-
-
-        // Move order into pending payment (retry stays on same order)
+        // Move order into pending payment
         order.setStatus(OrderStatus.PENDING_PAYMENT);
         orderRepo.save(order);
 
-        // Call gateway (mock for now)
+        // Call Daraja gateway
         MpesaGatewayResult result = mpesaGateway.stkPush(
                 req.getPhoneNumber(),
                 attempt.getAmountMinor(),
@@ -80,7 +86,7 @@ public class PaymentService {
                 attempt.getStatus(),
                 attempt.getCheckoutRequestId(),
                 attempt.getMerchantRequestId(),
-                "Payment request sent (mock)" // will become real message later
+                "STK push request accepted for processing"
         );
     }
 }

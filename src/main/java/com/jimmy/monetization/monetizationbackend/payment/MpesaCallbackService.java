@@ -42,7 +42,7 @@ public class MpesaCallbackService {
         if (attempt.getProcessedAt() != null) {
             // Idempotent replay: if payment already confirmed, ensure entitlement exists
             if (attempt.getStatus() == PaymentStatus.CONFIRMED) {
-                entitlementService.grantForOrder(attempt.getOrderId());
+                entitlementService.ensureGrantedForOrder(attempt.getOrderId());
             }
             return;
         }

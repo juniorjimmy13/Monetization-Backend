@@ -51,4 +51,36 @@ public class EntitlementService {
         order.setStatus(OrderStatus.COMPLETED);
         orderRepo.save(order);
     }
+    // com.jimmy.monetization.monetizationbackend.entitlement.EntitlementService
+
+    @Transactional
+    public void ensureGrantedForOrder(UUID orderId) {
+        // idempotent
+        if (entitlementRepo.findByOrderId(orderId).isPresent()) return;
+
+        Order order = orderRepo.findById(orderId).orElseThrow();
+
+        // Allow grant if payment is already confirmed OR later states (COMPLETED etc.)
+        if (order.getStatus() == OrderStatus.PAYMENT_CONFIRMED
+                || order.getStatus() == OrderStatus.ENTITLEMENT_GRANTED
+                || order.getStatus() == OrderStatus.COMPLETED) {
+            // create entitlement if missing
+            Entitlement e = new Entitlement();
+            e.setTenantId(order.getTenantId());
+            e.setUserId(order.getUserId());
+            e.setOrderId(order.getId());
+            e.setProductId(order.getProductId());
+            e.setStatus(EntitlementStatus.ACTIVE);
+            entitlementRepo.save(e);
+
+            // If order is still at PAYMENT_CONFIRMED, progress it.
+            if (order.getStatus() == OrderStatus.PAYMENT_CONFIRMED) {
+                order.setStatus(OrderStatus.COMPLETED);
+                orderRepo.save(order);
+            }
+            return;
+        }
+
+        throw new IllegalStateException("Order is not paid/confirmed yet");
+    }
 }

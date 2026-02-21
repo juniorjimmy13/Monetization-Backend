@@ -15,7 +15,7 @@ public class CorsConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(List.of(
-                "https://monetization-demo-i0dxzu9fs-juniorjimmy13s-projects.vercel.app/"
+                "https://monetization-demo-bgglr07p8-juniorjimmy13s-projects.vercel.app/"
         ));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         cfg.setAllowedHeaders(List.of("Authorization","Content-Type"));

@@ -21,7 +21,7 @@ public class SecurityConfig {
     ) throws Exception {
 
         ApiKeyAuthFilter apiKeyFilter = new ApiKeyAuthFilter(tenantRepository, apiKeyHasher);
-
+        http.cors(cors -> {});
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

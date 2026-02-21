@@ -31,7 +31,10 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
         // Allow MPesa callback + health checks + admin endpoints to have their own auth
         return path.startsWith("/api/v1/webhooks/")
                 || path.startsWith("/actuator/")
-                || path.equals("/api/v1/admin/tenants");
+                || path.equals("/api/v1/admin/tenants")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/v3/api-docs")
+                || path.equals("/swagger-ui.html");
     }
 
     @Override

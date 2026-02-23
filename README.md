@@ -197,7 +197,7 @@ GET /api/v1/entitlements?externalUserId=player123
 Authorization: Bearer <tenant_api_key>
 ```
 
-## esting
+## Testing
 
 ### Run Tests
 
@@ -325,6 +325,3 @@ This project is submitted as part of academic requirements at USIU-Africa.
 - Safaricom Daraja API Team
 
 ---
-
-**Status:** 🔨 In Development (Week 1 Complete)
-**Next:** Week 2 - JPA Entities & Repositories

@@ -197,7 +197,7 @@ GET /api/v1/entitlements?externalUserId=player123
 Authorization: Bearer <tenant_api_key>
 ```
 
-## esting
+## Testing
 
 ### Run Tests
 

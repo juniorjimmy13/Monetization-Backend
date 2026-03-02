@@ -350,7 +350,7 @@
     "bearer": [
       {
         "key": "token",
-        "value": "sk_live_qJVCr8VHPgqhleml7uDXjqGiDoyLJ3zr",
+        "value": "{{API_KEY}}",
         "type": "string"
       }
     ]

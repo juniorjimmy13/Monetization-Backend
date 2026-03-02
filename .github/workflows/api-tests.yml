@@ -30,13 +30,18 @@ jobs:
         run: |
           npm install -g newman
           npm install -g newman-reporter-htmlextra
+      
+      # ADD THIS STEP before running Newman
+      - name: Create reports directory
+        run: mkdir -p reports
+
 
       # 4. Run Postman collection
       - name: Run API Tests
         id: newman
         run: |
-          newman run postman/collection.json \
-            --environment postman/environment.json \
+          newman run postman/Monetization Backend Workflow.postman_collection.json \
+            --environment postman/RailwayEnv.postman_environment.json \
             --env-var "baseUrl=${{ secrets.BASEURL }}" \
             --env-var "API_KEY=${{ secrets.API_KEY }}" \
             --reporters cli,htmlextra \

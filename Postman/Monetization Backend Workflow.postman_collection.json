@@ -1,0 +1,501 @@
+{
+  "info": {
+    "_postman_id": "7e12d8e8-accd-4897-bf4f-86d4326d2449",
+    "name": "Monetization Backend Workflow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21666139"
+  },
+  "item": [
+    {
+      "name": "Tenant_APIKEY",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer sk_admin_local_test_key",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Epic Game Studio\",\r\n  \"webhookUrl\": \"https://example.com/webhooks/monetization\",\r\n  \"webhookSecret\": \"secret_abc123\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/admin/tenants",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "tenants"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateProduct",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"sku\": \"premium-sword\",\r\n  \"name\": \"Premium Sword\",\r\n  \"description\": \"A legendary blade\",\r\n  \"priceMinor\": 10000,\r\n  \"currency\": \"KES\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/admin/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer sk_live_qJVCr8VHPgqhleml7uDXjqGiDoyLJ3zr",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"externalUserId\": \"p2\",\r\n  \"productSku\": \"gun\",\r\n  \"phoneNumber\": \"254757597618\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}}/api/v1/orders",
+          "host": [
+            "{{baseUrl}}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "MockPayment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"orderId\": \"ca5e38fc-f9de-471e-b631-1c4b9ef95d67\",\r\n  \"phoneNumber\": \"254712345678\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/payments/initiate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "payments",
+            "initiate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CheckoutRequest",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Body\": {\r\n    \"stkCallback\": {\r\n      \"MerchantRequestID\": \"MR-ab3d8434-00a3-4152-a909-c2d93033e0fd\",\r\n      \"CheckoutRequestID\": \"ws_CO_45eccf0569c2\",\r\n      \"ResultCode\": 0,\r\n      \"ResultDesc\": \"The service request is processed successfully.\",\r\n      \"CallbackMetadata\": {\r\n        \"Item\": [\r\n          { \"Name\": \"Amount\", \"Value\": 100 },\r\n          { \"Name\": \"MpesaReceiptNumber\", \"Value\": \"NLJ7RT61SV\" },\r\n          { \"Name\": \"TransactionDate\", \"Value\": 20260210172100 },\r\n          { \"Name\": \"PhoneNumber\", \"Value\": 254712345678 }\r\n        ]\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/webhooks/mpesa/callback",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "webhooks",
+            "mpesa",
+            "callback"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "EntitlementConfirm",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/entitlements?userId=player123",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "entitlements"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "userId",
+              "value": "player123"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "MpesaDarajaTest",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "QsFLqTvXTBhW67zo2xpx2OwkX0G2oGGxemZclPjvTtrEKWtWlwAXWJE3D5JGLo6Z",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "4Nm0kY1oLduHKRKiMXj81PxAfP58rytvtJJz6vrWWFglM7Kh",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
+          "protocol": "https",
+          "host": [
+            "sandbox",
+            "safaricom",
+            "co",
+            "ke"
+          ],
+          "path": [
+            "oauth",
+            "v1",
+            "generate"
+          ],
+          "query": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "STKPush",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const CryptoJS = require('crypto-js');\r",
+              "\r",
+              "// Set these in your environment:\r",
+              "const shortCode = \"174379\" // e.g. 174379\r",
+              "const passKey   = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'   // from Daraja portal\r",
+              "\r",
+              "// Kenya time (Postman runs in your machine time, so we build a pure numeric timestamp)\r",
+              "// If your PC clock is correct, this is enough:\r",
+              "function pad(n){ return n < 10 ? \"0\"+n : \"\"+n; }\r",
+              "const now = new Date();\r",
+              "\r",
+              "const timestamp =\r",
+              "  now.getFullYear().toString() +\r",
+              "  pad(now.getMonth()+1) +\r",
+              "  pad(now.getDate()) +\r",
+              "  pad(now.getHours()) +\r",
+              "  pad(now.getMinutes()) +\r",
+              "  pad(now.getSeconds());\r",
+              "\r",
+              "const password = CryptoJS.enc.Base64.stringify(\r",
+              "  CryptoJS.enc.Utf8.parse(shortCode + passKey + timestamp)\r",
+              ");\r",
+              "\r",
+              "pm.environment.set(\"MPESA_TIMESTAMP\", timestamp);\r",
+              "pm.environment.set(\"MPESA_PASSWORD\", password);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer a9xqR8NHPSq17r0j3RAVed4PnnKY",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"BusinessShortCode\": \"174379\",\r\n  \"Password\":\"{{MPESA_PASSWORD}}\",\r\n  \"Timestamp\": \"{{MPESA_TIMESTAMP}}\",\r\n  \"TransactionType\": \"CustomerPayBillOnline\",\r\n  \"Amount\": 1,\r\n  \"PartyA\": \"254757597618\",\r\n  \"PartyB\": \"174379\",\r\n  \"PhoneNumber\": \"254757597618\",\r\n  \"CallBackURL\": \"https://unregressive-ilse-obclavate.ngrok-free.dev/api/v1/webhooks/mpesa/callback\",\r\n  \"AccountReference\": \"player123\",\r\n  \"TransactionDesc\": \"Test purchase\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+          "protocol": "https",
+          "host": [
+            "sandbox",
+            "safaricom",
+            "co",
+            "ke"
+          ],
+          "path": [
+            "mpesa",
+            "stkpush",
+            "v1",
+            "processrequest"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ListProducts",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}api/v1/admin/products",
+          "host": [
+            "{{baseUrl}}api"
+          ],
+          "path": [
+            "v1",
+            "admin",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get ProductBySku",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Update By Sku",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "sk_live_qJVCr8VHPgqhleml7uDXjqGiDoyLJ3zr",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": ""
+    },
+    {
+      "key": "apiKey",
+      "value": ""
+    },
+    {
+      "key": "tenantId",
+      "value": ""
+    },
+    {
+      "key": "externalUserId",
+      "value": ""
+    },
+    {
+      "key": "sku",
+      "value": ""
+    },
+    {
+      "key": "orderID",
+      "value": ""
+    },
+    {
+      "key": "amountMinor",
+      "value": ""
+    },
+    {
+      "key": "currency",
+      "value": ""
+    },
+    {
+      "key": "providerRef",
+      "value": ""
+    }
+  ]
+}

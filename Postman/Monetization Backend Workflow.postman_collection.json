@@ -12,11 +12,6 @@
         "method": "POST",
         "header": [
           {
-            "key": "Authorization",
-            "value": "Bearer sk_admin_local_test_key",
-            "type": "text"
-          },
-          {
             "key": "Content-Type",
             "value": "application/json",
             "type": "text"
@@ -32,14 +27,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/api/v1/admin/tenants",
-          "protocol": "http",
+          "raw": "{{baseUrl}}api/v1/admin/tenants",
           "host": [
-            "localhost"
+            "{{baseUrl}}api"
           ],
-          "port": "8080",
           "path": [
-            "api",
             "v1",
             "admin",
             "tenants"
@@ -54,11 +46,6 @@
         "method": "POST",
         "header": [
           {
-            "key": "Authorization",
-            "value": "Bearer sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
-            "type": "text"
-          },
-          {
             "key": "Content-Type",
             "value": "application/json",
             "type": "text"
@@ -66,7 +53,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"sku\": \"premium-sword\",\r\n  \"name\": \"Premium Sword\",\r\n  \"description\": \"A legendary blade\",\r\n  \"priceMinor\": 10000,\r\n  \"currency\": \"KES\"\r\n}\r\n",
+          "raw": "{\r\n  \"sku\": \"lightningBlade\",\r\n  \"name\": \"Lightning Blade\",\r\n  \"description\": \"Spreads arcs of lightning across enemies \",\r\n  \"priceMinor\": 1,\r\n  \"currency\": \"KES\"\r\n}\r\n",
           "options": {
             "raw": {
               "language": "json"
@@ -74,14 +61,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/api/v1/admin/products",
-          "protocol": "http",
+          "raw": "{{baseUrl}}api/v1/admin/products",
           "host": [
-            "localhost"
+            "{{baseUrl}}api"
           ],
-          "port": "8080",
           "path": [
-            "api",
             "v1",
             "admin",
             "products"
@@ -95,11 +79,6 @@
       "request": {
         "method": "POST",
         "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer sk_live_qJVCr8VHPgqhleml7uDXjqGiDoyLJ3zr",
-            "type": "text"
-          },
           {
             "key": "Content-Type",
             "value": "application/json",
@@ -130,55 +109,13 @@
       "response": []
     },
     {
-      "name": "MockPayment",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
-            "type": "text"
-          },
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"orderId\": \"ca5e38fc-f9de-471e-b631-1c4b9ef95d67\",\r\n  \"phoneNumber\": \"254712345678\"\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8080/api/v1/payments/initiate",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "api",
-            "v1",
-            "payments",
-            "initiate"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "CheckoutRequest",
       "request": {
         "method": "POST",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"Body\": {\r\n    \"stkCallback\": {\r\n      \"MerchantRequestID\": \"MR-ab3d8434-00a3-4152-a909-c2d93033e0fd\",\r\n      \"CheckoutRequestID\": \"ws_CO_45eccf0569c2\",\r\n      \"ResultCode\": 0,\r\n      \"ResultDesc\": \"The service request is processed successfully.\",\r\n      \"CallbackMetadata\": {\r\n        \"Item\": [\r\n          { \"Name\": \"Amount\", \"Value\": 100 },\r\n          { \"Name\": \"MpesaReceiptNumber\", \"Value\": \"NLJ7RT61SV\" },\r\n          { \"Name\": \"TransactionDate\", \"Value\": 20260210172100 },\r\n          { \"Name\": \"PhoneNumber\", \"Value\": 254712345678 }\r\n        ]\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+          "raw": "{\r\n  \"Body\": {\r\n    \"stkCallback\": {\r\n      \"MerchantRequestID\": \"MR-55d8aa7f-3716-4c0e-8224-eb9cfa4fd24d\",\r\n      \"CheckoutRequestID\": \"ws_CO_9e3bb0dd362e\",\r\n      \"ResultCode\": 0,\r\n      \"ResultDesc\": \"The service request is processed successfully.\",\r\n      \"CallbackMetadata\": {\r\n        \"Item\": [\r\n          { \"Name\": \"Amount\", \"Value\": 100 },\r\n          { \"Name\": \"MpesaReceiptNumber\", \"Value\": \"NLJ7RT61SG\" },\r\n          { \"Name\": \"TransactionDate\", \"Value\": 20260210172100 },\r\n          { \"Name\": \"PhoneNumber\", \"Value\": 254712345678 }\r\n        ]\r\n      }\r\n    }\r\n  }\r\n}\r\n",
           "options": {
             "raw": {
               "language": "json"
@@ -186,12 +123,10 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/api/v1/webhooks/mpesa/callback",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/v1/webhooks/mpesa/callback",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "8080",
           "path": [
             "api",
             "v1",
@@ -205,37 +140,40 @@
     },
     {
       "name": "EntitlementConfirm",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
       "request": {
         "method": "GET",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
-            "type": "text"
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
           }
-        ],
+        },
         "url": {
-          "raw": "http://localhost:8080/api/v1/entitlements?userId=player123",
-          "protocol": "http",
+          "raw": "{{baseUrl}}api/v1/entitlements?userId=p2",
           "host": [
-            "localhost"
+            "{{baseUrl}}api"
           ],
-          "port": "8080",
           "path": [
-            "api",
             "v1",
             "entitlements"
           ],
           "query": [
             {
-              "key": "",
-              "value": null,
-              "type": "text",
-              "disabled": true
+              "key": "userId",
+              "value": "p2"
             },
             {
-              "key": "userId",
-              "value": "player123"
+              "key": "",
+              "value": "",
+              "type": "text",
+              "disabled": true
             }
           ]
         }
@@ -289,30 +227,15 @@
     {
       "name": "ListProducts",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer sk_live_SFbSFJhZqQT1aC8ThUbhkfgQMCaGIW9G",
-            "type": "text"
-          }
-        ],
+        "header": [],
         "url": {
-          "raw": "{{baseUrl}}api/v1/admin/products",
+          "raw": "{{baseUrl}}/api/v1/admin/products",
           "host": [
-            "{{baseUrl}}api"
+            "{{baseUrl}}"
           ],
           "path": [
+            "api",
             "v1",
             "admin",
             "products"
@@ -332,15 +255,58 @@
       "name": "Get ProductBySku",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/admin/products/sku/gun?=",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "products",
+            "sku",
+            "gun"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": ""
+            }
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "Update By Sku",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Starter Gun v2\",\r\n  \"priceMinor\": 2,\r\n  \"description\": \"Updated description\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/admin/products/sku/gun",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "products",
+            "sku",
+            "gun"
+          ]
+        }
       },
       "response": []
     }
@@ -377,44 +343,6 @@
           ""
         ]
       }
-    }
-  ],
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": ""
-    },
-    {
-      "key": "apiKey",
-      "value": ""
-    },
-    {
-      "key": "tenantId",
-      "value": ""
-    },
-    {
-      "key": "externalUserId",
-      "value": ""
-    },
-    {
-      "key": "sku",
-      "value": ""
-    },
-    {
-      "key": "orderID",
-      "value": ""
-    },
-    {
-      "key": "amountMinor",
-      "value": ""
-    },
-    {
-      "key": "currency",
-      "value": ""
-    },
-    {
-      "key": "providerRef",
-      "value": ""
     }
   ]
 }

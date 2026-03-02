@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/webhooks/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/api/v1/admin/tenants").permitAll()
+                        .requestMatchers("/api/v1/admin/products/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()

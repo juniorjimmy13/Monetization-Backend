@@ -40,8 +40,8 @@ jobs:
       - name: Run API Tests
         id: newman
         run: |
-          newman run postman/collection.json \
-            --environment postman/environment.json \
+          newman run Postman/collection.json \
+            --environment Postman/environment.json \
             --env-var "baseUrl=${{ secrets.BASEURL }}" \
             --env-var "API_KEY=${{ secrets.API_KEY }}" \
             --reporters cli,htmlextra \

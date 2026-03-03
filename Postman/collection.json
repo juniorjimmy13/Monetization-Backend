@@ -27,9 +27,9 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}api/v1/admin/tenants",
+          "raw": "{{baseUrl}}/api/v1/admin/tenants",
           "host": [
-            "{{baseUrl}}api"
+            "{{baseUrl}}"
           ],
           "path": [
             "v1",
@@ -61,9 +61,9 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}api/v1/admin/products",
+          "raw": "{{baseUrl}}/api/v1/admin/products",
           "host": [
-            "{{baseUrl}}api"
+            "{{baseUrl}}"
           ],
           "path": [
             "v1",
@@ -95,9 +95,9 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}}/api/v1/orders",
+          "raw": "{{baseUrl}}/api/v1/orders",
           "host": [
-            "{{baseUrl}}}"
+            "{{baseUrl}}"
           ],
           "path": [
             "api",
@@ -156,9 +156,9 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}api/v1/entitlements?userId=p2",
+          "raw": "{{baseUrl}}/api/v1/entitlements?userId=p2",
           "host": [
-            "{{baseUrl}}api"
+            "{{baseUrl}}"
           ],
           "path": [
             "v1",

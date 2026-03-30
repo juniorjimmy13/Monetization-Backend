@@ -33,7 +33,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
                 || path.startsWith("/actuator/")
                 || path.equals("/api/v1/admin/tenants")
                 //|| path.equals("/api/v1/admin/products")
-                //|| path.startsWith("/api/v1/admin/")
+                //b|| path.startsWith("/api/v1/admin/")
                 || path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")
                 || path.equals("/swagger-ui.html");

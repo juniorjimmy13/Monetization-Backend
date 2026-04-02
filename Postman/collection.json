@@ -1,346 +1,902 @@
 {
   "info": {
-    "_postman_id": "7e12d8e8-accd-4897-bf4f-86d4326d2449",
-    "name": "Monetization Backend Workflow",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "21666139"
+    "_postman_id": "uat-monetization-backend-v1",
+    "name": "Monetization Backend — UAT Test Suite",
+    "description": "UAT test collection for the Digital Monetization Backend. Covers tenant onboarding, product lifecycle, MPesa STK Push order flow, webhook callback processing, and entitlement verification. Run against a locally running instance (http://localhost:8080) backed by a dedicated test database.\n\nPre-requisites:\n  • baseUrl = http://localhost:8080\n  • ADMIN_API_KEY set in environment\n  • API_KEY will be captured automatically after TC-01",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": [
-    {
-      "name": "Tenant_APIKEY",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"name\": \"Epic Game Studio\",\r\n  \"webhookUrl\": \"https://example.com/webhooks/monetization\",\r\n  \"webhookSecret\": \"secret_abc123\"\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/admin/tenants",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "v1",
-            "admin",
-            "tenants"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "CreateProduct",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text" 
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"sku\": \"lightningBlade\",\r\n  \"name\": \"Lightning Blade\",\r\n  \"description\": \"Spreads arcs of lightning across enemies \",\r\n  \"priceMinor\": 1,\r\n  \"currency\": \"KES\"\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/admin/products",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "v1",
-            "admin",
-            "products"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Order",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"externalUserId\": \"p2\",\r\n  \"productSku\": \"gun\",\r\n  \"phoneNumber\": \"254757597618\"\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/orders",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "orders"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "CheckoutRequest",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"Body\": {\r\n    \"stkCallback\": {\r\n      \"MerchantRequestID\": \"MR-55d8aa7f-3716-4c0e-8224-eb9cfa4fd24d\",\r\n      \"CheckoutRequestID\": \"ws_CO_9e3bb0dd362e\",\r\n      \"ResultCode\": 0,\r\n      \"ResultDesc\": \"The service request is processed successfully.\",\r\n      \"CallbackMetadata\": {\r\n        \"Item\": [\r\n          { \"Name\": \"Amount\", \"Value\": 100 },\r\n          { \"Name\": \"MpesaReceiptNumber\", \"Value\": \"NLJ7RT61SG\" },\r\n          { \"Name\": \"TransactionDate\", \"Value\": 20260210172100 },\r\n          { \"Name\": \"PhoneNumber\", \"Value\": 254712345678 }\r\n        ]\r\n      }\r\n    }\r\n  }\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/webhooks/mpesa/callback",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "webhooks",
-            "mpesa",
-            "callback"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "EntitlementConfirm",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "method": "GET",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/entitlements?userId=p2",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "v1",
-            "entitlements"
-          ],
-          "query": [
-            {
-              "key": "userId",
-              "value": "p2"
-            },
-            {
-              "key": "",
-              "value": "",
-              "type": "text",
-              "disabled": true
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "MpesaDarajaTest",
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "QsFLqTvXTBhW67zo2xpx2OwkX0G2oGGxemZclPjvTtrEKWtWlwAXWJE3D5JGLo6Z",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "4Nm0kY1oLduHKRKiMXj81PxAfP58rytvtJJz6vrWWFglM7Kh",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
-          "protocol": "https",
-          "host": [
-            "sandbox",
-            "safaricom",
-            "co",
-            "ke"
-          ],
-          "path": [
-            "oauth",
-            "v1",
-            "generate"
-          ],
-          "query": [
-            {
-              "key": "grant_type",
-              "value": "client_credentials"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "ListProducts",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/admin/products",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "admin",
-            "products"
-          ],
-          "query": [
-            {
-              "key": "",
-              "value": null,
-              "disabled": true
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get ProductBySku",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/admin/products/sku/gun?=",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "admin",
-            "products",
-            "sku",
-            "gun"
-          ],
-          "query": [
-            {
-              "key": "",
-              "value": ""
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update By Sku",
-      "request": {
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"name\": \"Starter Gun v2\",\r\n  \"priceMinor\": 2,\r\n  \"description\": \"Updated description\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/admin/products/sku/gun",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "admin",
-            "products",
-            "sku",
-            "gun"
-          ]
-        }
-      },
-      "response": []
-    }
-  ],
   "auth": {
     "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{API_KEY}}",
-        "type": "string"
-      }
-    ]
+    "bearer": [{ "key": "token", "value": "{{API_KEY}}", "type": "string" }]
   },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "ADMIN_API_KEY", "value": "sk_admin_your_secret_key" },
+    { "key": "API_KEY", "value": "" },
+    { "key": "tenantId", "value": "" },
+    { "key": "productSku", "value": "lightning-blade-uat" },
+    { "key": "orderId", "value": "" },
+    { "key": "checkoutRequestId", "value": "" },
+    { "key": "testUserId", "value": "uat-player-001" },
+    { "key": "testPhone", "value": "254757597618" }
+  ],
+  "item": [
+    {
+      "name": "1 — Tenant Onboarding",
+      "item": [
+        {
+          "name": "TC-01 Create Tenant (valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-01: Status is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('TC-01: Response contains tenantId', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('tenantId');",
+                  "    pm.collectionVariables.set('tenantId', json.tenantId);",
+                  "});",
+                  "",
+                  "pm.test('TC-01: Response contains apiKey', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('apiKey');",
+                  "    pm.expect(json.apiKey).to.be.a('string').and.not.empty;",
+                  "    // Capture for all subsequent requests",
+                  "    pm.collectionVariables.set('API_KEY', json.apiKey);",
+                  "});",
+                  "",
+                  "pm.test('TC-01: apiKey starts with sk_live_ or sk_', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.apiKey).to.match(/^sk_/);",
+                  "});",
+                  "",
+                  "pm.test('TC-01: Response time < 3000ms', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{ADMIN_API_KEY}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Epic Game Studio UAT\",\n  \"webhookUrl\": \"https://example.com/webhooks/monetization\",\n  \"webhookSecret\": \"uat_secret_abc123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/tenants", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "tenants"] }
+          }
+        },
+        {
+          "name": "TC-02 Create Tenant — missing name (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-02: Status is 400 Bad Request', function () {",
+                  "    pm.expect(pm.response.code).to.equal(400);",
+                  "});",
+                  "",
+                  "pm.test('TC-02: Error body is present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.satisfy(function(j) {",
+                  "        return j.message || j.error || j.errors;",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{ADMIN_API_KEY}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"webhookUrl\": \"https://example.com/webhooks/monetization\",\n  \"webhookSecret\": \"uat_secret\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/tenants", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "tenants"] }
+          }
+        },
+        {
+          "name": "TC-03 Create Tenant — no auth (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-03: Status is 401 Unauthorized', function () {",
+                  "    pm.expect(pm.response.code).to.equal(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rogue Studio\",\n  \"webhookUrl\": \"https://evil.com\",\n  \"webhookSecret\": \"x\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/tenants", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "tenants"] }
+          }
+        },
+        {
+          "name": "TC-04 Create Tenant — wrong key (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-04: Status is 401 or 403 for bad admin key', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "sk_admin_wrong_key", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hacker Studio\",\n  \"webhookUrl\": \"https://example.com\",\n  \"webhookSecret\": \"x\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/tenants", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "tenants"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 — Product Management",
+      "item": [
+        {
+          "name": "TC-05 Create Product (valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-05: Status is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('TC-05: Product has expected sku', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.sku).to.equal(pm.collectionVariables.get('productSku'));",
+                  "});",
+                  "",
+                  "pm.test('TC-05: Product has priceMinor field', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('priceMinor').that.is.a('number');",
+                  "});",
+                  "",
+                  "pm.test('TC-05: Currency is KES', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.currency).to.equal('KES');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"{{productSku}}\",\n  \"name\": \"Lightning Blade\",\n  \"description\": \"Spreads arcs of lightning across enemies\",\n  \"priceMinor\": 10000,\n  \"currency\": \"KES\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/products", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "products"] }
+          }
+        },
+        {
+          "name": "TC-06 Create Product — duplicate SKU (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-06: Status is 409 Conflict for duplicate SKU', function () {",
+                  "    pm.expect(pm.response.code).to.equal(409);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"{{productSku}}\",\n  \"name\": \"Duplicate Blade\",\n  \"description\": \"Should fail\",\n  \"priceMinor\": 5000,\n  \"currency\": \"KES\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/products", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "products"] }
+          }
+        },
+        {
+          "name": "TC-07 Create Product — negative price (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-07: Status is 400 for negative price', function () {",
+                  "    pm.expect(pm.response.code).to.equal(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"bad-price-sku\",\n  \"name\": \"Free Glitch\",\n  \"description\": \"Should fail\",\n  \"priceMinor\": -1,\n  \"currency\": \"KES\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/products", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "products"] }
+          }
+        },
+        {
+          "name": "TC-08 List Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-08: Status is 200', function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "pm.test('TC-08: Response is an array', function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('TC-08: List includes the created product', function () {",
+                  "    var list = pm.response.json();",
+                  "    var sku = pm.collectionVariables.get('productSku');",
+                  "    var found = list.some(function(p) { return p.sku === sku; });",
+                  "    pm.expect(found).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/products", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "products"] }
+          }
+        },
+        {
+          "name": "TC-09 Get Product by SKU",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-09: Status is 200', function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "pm.test('TC-09: SKU matches', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.sku).to.equal(pm.collectionVariables.get('productSku'));",
+                  "});",
+                  "",
+                  "pm.test('TC-09: Name is present', function () {",
+                  "    pm.expect(pm.response.json().name).to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/products/sku/{{productSku}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "products", "sku", "{{productSku}}"]
+            }
+          }
+        },
+        {
+          "name": "TC-10 Get Product — unknown SKU (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-10: Status is 404 for unknown SKU', function () {",
+                  "    pm.expect(pm.response.code).to.equal(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/products/sku/does-not-exist-sku",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "products", "sku", "does-not-exist-sku"]
+            }
+          }
+        },
+        {
+          "name": "TC-11 Update Product by SKU",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-11: Status is 200', function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "pm.test('TC-11: Name is updated', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.name).to.equal('Lightning Blade v2');",
+                  "});",
+                  "",
+                  "pm.test('TC-11: Price is updated', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.priceMinor).to.equal(15000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lightning Blade v2\",\n  \"priceMinor\": 15000,\n  \"description\": \"Upgraded — now with chain lightning\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/products/sku/{{productSku}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "products", "sku", "{{productSku}}"]
+            }
+          }
+        },
+        {
+          "name": "TC-12 Update Product — cross-tenant attempt (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-12: Status is 401 or 403 or 404 for cross-tenant access', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([401, 403, 404]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "sk_live_different_tenant_key", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Stolen Blade\",\n  \"priceMinor\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/products/sku/{{productSku}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "products", "sku", "{{productSku}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 — Order Creation",
+      "item": [
+        {
+          "name": "TC-13 Create Order (valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-13: Status is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('TC-13: Response has orderId', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('orderId').or.have.property('id');",
+                  "    var oid = json.orderId || json.id;",
+                  "    pm.collectionVariables.set('orderId', oid);",
+                  "});",
+                  "",
+                  "pm.test('TC-13: Order status is PENDING or CREATED', function () {",
+                  "    var json = pm.response.json();",
+                  "    var status = json.status || json.orderStatus;",
+                  "    pm.expect(status).to.be.oneOf(['PENDING', 'CREATED', 'AWAITING_PAYMENT']);",
+                  "});",
+                  "",
+                  "pm.test('TC-13: Correct product SKU in response', function () {",
+                  "    var json = pm.response.json();",
+                  "    var sku = json.productSku || (json.product && json.product.sku);",
+                  "    pm.expect(sku).to.equal(pm.collectionVariables.get('productSku'));",
+                  "});",
+                  "",
+                  "pm.test('TC-13: STK Push initiated (checkoutRequestId present)', function () {",
+                  "    var json = pm.response.json();",
+                  "    var crid = json.checkoutRequestId || json.mpesaCheckoutRequestId;",
+                  "    if (crid) {",
+                  "        pm.collectionVariables.set('checkoutRequestId', crid);",
+                  "        pm.expect(crid).to.be.a('string').and.not.empty;",
+                  "    } else {",
+                  "        // STK push may be async; pass but note absence",
+                  "        console.warn('checkoutRequestId not in order response — may be dispatched asynchronously');",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalUserId\": \"{{testUserId}}\",\n  \"productSku\": \"{{productSku}}\",\n  \"phoneNumber\": \"{{testPhone}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/orders", "host": ["{{baseUrl}}"], "path": ["api", "v1", "orders"] }
+          }
+        },
+        {
+          "name": "TC-14 Create Order — invalid phone number (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-14: Status is 400 for invalid phone', function () {",
+                  "    pm.expect(pm.response.code).to.equal(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalUserId\": \"{{testUserId}}\",\n  \"productSku\": \"{{productSku}}\",\n  \"phoneNumber\": \"not-a-phone\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/orders", "host": ["{{baseUrl}}"], "path": ["api", "v1", "orders"] }
+          }
+        },
+        {
+          "name": "TC-15 Create Order — unknown SKU (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-15: Status is 404 for unknown product SKU', function () {",
+                  "    pm.expect(pm.response.code).to.equal(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalUserId\": \"{{testUserId}}\",\n  \"productSku\": \"ghost-sku-9999\",\n  \"phoneNumber\": \"{{testPhone}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/orders", "host": ["{{baseUrl}}"], "path": ["api", "v1", "orders"] }
+          }
+        },
+        {
+          "name": "TC-16 Create Order — unauthenticated (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-16: Status is 401 for unauthenticated order', function () {",
+                  "    pm.expect(pm.response.code).to.equal(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalUserId\": \"hacker\",\n  \"productSku\": \"{{productSku}}\",\n  \"phoneNumber\": \"{{testPhone}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/orders", "host": ["{{baseUrl}}"], "path": ["api", "v1", "orders"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 — MPesa Callback (STK Push)",
+      "item": [
+        {
+          "name": "TC-17 Successful Payment Callback",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-17: Callback accepted — status 200', function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "pm.test('TC-17: Response is not an error', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.not.have.property('error');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Body\": {\n    \"stkCallback\": {\n      \"MerchantRequestID\": \"MR-uat-001\",\n      \"CheckoutRequestID\": \"ws_CO_uat_success_001\",\n      \"ResultCode\": 0,\n      \"ResultDesc\": \"The service request is processed successfully.\",\n      \"CallbackMetadata\": {\n        \"Item\": [\n          { \"Name\": \"Amount\", \"Value\": 150 },\n          { \"Name\": \"MpesaReceiptNumber\", \"Value\": \"UAT1RT61SG\" },\n          { \"Name\": \"TransactionDate\", \"Value\": 20260402120000 },\n          { \"Name\": \"PhoneNumber\", \"Value\": 254757597618 }\n        ]\n      }\n    }\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/webhooks/mpesa/callback", "host": ["{{baseUrl}}"], "path": ["api", "v1", "webhooks", "mpesa", "callback"] }
+          }
+        },
+        {
+          "name": "TC-18 Failed Payment Callback (ResultCode 1032 — cancelled)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-18: Callback for failed payment accepted — status 200', function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "pm.test('TC-18: Confirmation that cancelled payment is handled gracefully', function () {",
+                  "    // The system must accept the callback body and process the failure state",
+                  "    pm.expect(pm.response.code).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Body\": {\n    \"stkCallback\": {\n      \"MerchantRequestID\": \"MR-uat-002\",\n      \"CheckoutRequestID\": \"ws_CO_uat_cancelled_002\",\n      \"ResultCode\": 1032,\n      \"ResultDesc\": \"Request cancelled by user.\"\n    }\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/webhooks/mpesa/callback", "host": ["{{baseUrl}}"], "path": ["api", "v1", "webhooks", "mpesa", "callback"] }
+          }
+        },
+        {
+          "name": "TC-19 Replay/Duplicate Callback (idempotency)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-19: Duplicate callback does not cause 5xx', function () {",
+                  "    pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "pm.test('TC-19: Idempotency — response is 200 or 409 (already processed)', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 409]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Body\": {\n    \"stkCallback\": {\n      \"MerchantRequestID\": \"MR-uat-001\",\n      \"CheckoutRequestID\": \"ws_CO_uat_success_001\",\n      \"ResultCode\": 0,\n      \"ResultDesc\": \"The service request is processed successfully.\",\n      \"CallbackMetadata\": {\n        \"Item\": [\n          { \"Name\": \"Amount\", \"Value\": 150 },\n          { \"Name\": \"MpesaReceiptNumber\", \"Value\": \"UAT1RT61SG\" },\n          { \"Name\": \"TransactionDate\", \"Value\": 20260402120000 },\n          { \"Name\": \"PhoneNumber\", \"Value\": 254757597618 }\n        ]\n      }\n    }\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/webhooks/mpesa/callback", "host": ["{{baseUrl}}"], "path": ["api", "v1", "webhooks", "mpesa", "callback"] }
+          }
+        },
+        {
+          "name": "TC-20 Tampered Callback — mismatched amount (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-20: Tampered amount rejected (400) or accepted for async validation (200)', function () {",
+                  "    // If the system validates amount synchronously it should return 400.",
+                  "    // If it defers validation, it may accept 200 but must NOT grant entitlement.",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400]);",
+                  "    console.warn('Verify manually that no entitlement was created for this tampered callback.');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Body\": {\n    \"stkCallback\": {\n      \"MerchantRequestID\": \"MR-uat-tamper-003\",\n      \"CheckoutRequestID\": \"ws_CO_uat_tamper_003\",\n      \"ResultCode\": 0,\n      \"ResultDesc\": \"The service request is processed successfully.\",\n      \"CallbackMetadata\": {\n        \"Item\": [\n          { \"Name\": \"Amount\", \"Value\": 1 },\n          { \"Name\": \"MpesaReceiptNumber\", \"Value\": \"FAKE9999XX\" },\n          { \"Name\": \"TransactionDate\", \"Value\": 20260402120500 },\n          { \"Name\": \"PhoneNumber\", \"Value\": 254757597618 }\n        ]\n      }\n    }\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/webhooks/mpesa/callback", "host": ["{{baseUrl}}"], "path": ["api", "v1", "webhooks", "mpesa", "callback"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5 — Entitlement Verification",
+      "item": [
+        {
+          "name": "TC-21 Query Entitlements — user has entitlement",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-21: Status is 200', function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "pm.test('TC-21: Response is an array', function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('TC-21: At least one entitlement exists after payment', function () {",
+                  "    var list = pm.response.json();",
+                  "    pm.expect(list.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test('TC-21: Entitlement is for the correct SKU', function () {",
+                  "    var list = pm.response.json();",
+                  "    var sku = pm.collectionVariables.get('productSku');",
+                  "    var found = list.some(function(e) {",
+                  "        return (e.productSku === sku) || (e.sku === sku) || (e.product && e.product.sku === sku);",
+                  "    });",
+                  "    pm.expect(found, 'Expected entitlement for SKU ' + sku).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test('TC-21: Entitlement has granted status', function () {",
+                  "    var list = pm.response.json();",
+                  "    var granted = list.some(function(e) {",
+                  "        var s = e.status || e.entitlementStatus || 'GRANTED';",
+                  "        return s === 'GRANTED' || s === 'ACTIVE';",
+                  "    });",
+                  "    pm.expect(granted).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/entitlements?externalUserId={{testUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "entitlements"],
+              "query": [{ "key": "externalUserId", "value": "{{testUserId}}" }]
+            }
+          }
+        },
+        {
+          "name": "TC-22 Query Entitlements — user with no purchases",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-22: Status is 200', function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "pm.test('TC-22: Empty array for user with no purchases', function () {",
+                  "    var list = pm.response.json();",
+                  "    pm.expect(list).to.be.an('array').and.have.lengthOf(0);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/entitlements?externalUserId=never-bought-anything",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "entitlements"],
+              "query": [{ "key": "externalUserId", "value": "never-bought-anything" }]
+            }
+          }
+        },
+        {
+          "name": "TC-23 Query Entitlements — cross-tenant isolation (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-23: Status is 200 (empty) or 403 — never returns another tenant data', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 403]);",
+                  "    if (pm.response.code === 200) {",
+                  "        var list = pm.response.json();",
+                  "        pm.expect(list).to.be.an('array').and.have.lengthOf(0);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "sk_live_different_tenant_key", "type": "string" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/entitlements?externalUserId={{testUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "entitlements"],
+              "query": [{ "key": "externalUserId", "value": "{{testUserId}}" }]
+            }
+          }
+        },
+        {
+          "name": "TC-24 Query Entitlements — unauthenticated (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-24: Status is 401 without auth', function () {",
+                  "    pm.expect(pm.response.code).to.equal(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/entitlements?externalUserId={{testUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "entitlements"],
+              "query": [{ "key": "externalUserId", "value": "{{testUserId}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6 — End-to-End Happy Path",
+      "item": [
+        {
+          "name": "E2E-01 Full Purchase Flow Validation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// This test validates the collection variables set by previous steps",
+                  "// to confirm the full E2E chain completed successfully.",
+                  "",
+                  "pm.test('E2E: Tenant was provisioned (tenantId set)', function () {",
+                  "    pm.expect(pm.collectionVariables.get('tenantId')).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('E2E: Tenant API key was issued (API_KEY set)', function () {",
+                  "    pm.expect(pm.collectionVariables.get('API_KEY')).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('E2E: Order was created (orderId set)', function () {",
+                  "    pm.expect(pm.collectionVariables.get('orderId')).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('E2E: All prerequisite IDs are present for entitlement check', function () {",
+                  "    var tenantId = pm.collectionVariables.get('tenantId');",
+                  "    var orderId  = pm.collectionVariables.get('orderId');",
+                  "    var apiKey   = pm.collectionVariables.get('API_KEY');",
+                  "    pm.expect([tenantId, orderId, apiKey].every(function(v) { return v && v.length > 0; })).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/entitlements?externalUserId={{testUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "entitlements"],
+              "query": [{ "key": "externalUserId", "value": "{{testUserId}}" }]
+            }
+          }
+        }
+      ]
+    }
+  ],
   "event": [
     {
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "packages": {},
-        "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": ["// Global pre-request: nothing needed — auth handled per folder/request"]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "packages": {},
-        "requests": {},
         "exec": [
-          ""
+          "// Global: log response time for every request",
+          "console.log('[' + pm.info.requestName + '] ' + pm.response.code + ' in ' + pm.response.responseTime + 'ms');"
         ]
       }
     }

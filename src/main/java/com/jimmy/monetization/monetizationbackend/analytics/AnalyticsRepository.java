@@ -83,16 +83,17 @@ public class AnalyticsRepository {
     @SuppressWarnings("unchecked")
     public List<Object[]> getTopTenants() {
         return em.createNativeQuery("""
-            SELECT 
-                tenant_id,
-                COUNT(*) as orders,
-                COALESCE(SUM(total_minor),0) as revenue
-            FROM orders
-            WHERE status='COMPLETED'
-            GROUP BY tenant_id
-            ORDER BY revenue DESC
-            LIMIT 10
-        """)
+        SELECT 
+            t.name as tenant_name,
+            COUNT(o.id) as orders,
+            COALESCE(SUM(o.total_minor),0) as revenue
+        FROM orders o
+        JOIN tenants t ON o.tenant_id = t.id
+        WHERE o.status = 'COMPLETED'
+        GROUP BY t.name
+        ORDER BY revenue DESC
+        LIMIT 10
+    """)
                 .getResultList();
     }
 

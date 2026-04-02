@@ -30,9 +30,9 @@ public class AdminAnalyticsService {
         return repo.getTopTenants()
                 .stream()
                 .map(r -> new TenantRevenueResponse(
-                        (java.util.UUID) r[0],
-                        ((Number) r[2]).longValue(),
-                        ((Number) r[1]).longValue()
+                        (String) r[0],          // tenant name
+                        ((Number) r[2]).longValue(), // revenue
+                        ((Number) r[1]).longValue()  // orders
                 ))
                 .collect(Collectors.toList());
     }

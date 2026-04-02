@@ -44,7 +44,7 @@ public class PaymentService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Order already completed");
         }
 
-        // ✅ Retry guard: if latest attempt is still pending, block
+        // Retry guard: if latest attempt is still pending, block
         attemptRepo.findTopByOrderIdOrderByCreatedAtDesc(order.getId()).ifPresent(last -> {
             if (last.getStatus() == PaymentStatus.PENDING && last.getProcessedAt() == null) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT,

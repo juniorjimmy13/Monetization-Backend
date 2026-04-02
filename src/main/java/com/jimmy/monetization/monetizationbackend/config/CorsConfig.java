@@ -17,7 +17,8 @@ public class CorsConfig {
         cfg.setAllowedOrigins(List.of(
                 "https://monetization-demo-git-master-juniorjimmy13s-projects.vercel.app/",
                 "https://monetization-demo.vercel.app/",
-                "http://localhost:5173/"
+                "https://game-analytics-peach.vercel.app/",
+                "http://localhost:5174/"
 
         ));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));

@@ -100,20 +100,19 @@ public class AnalyticsRepository {
     @SuppressWarnings("unchecked")
     public List<Object[]> getGlobalTopProducts() {
         return em.createNativeQuery("""
-            SELECT\s
-                        p.sku AS label,
-                        COUNT(*) AS sales,
-                        COALESCE(SUM(o.total_minor), 0) AS revenue
-                    FROM orders o
-                    JOIN products p\s
-                      ON o.product_id = p.id
-                     AND o.tenant_id = p.tenant_id
-                    WHERE o.status = 'COMPLETED'
-                    AND o.tenant_id = :tenantId
-                    GROUP BY p.sku
-                    ORDER BY revenue DESC
-                    LIMIT 10;
-        """)
+        SELECT
+            p.sku AS label,
+            COUNT(*) AS sales,
+            COALESCE(SUM(o.total_minor), 0) AS revenue
+        FROM orders o
+        JOIN products p
+          ON o.product_id = p.id
+         AND o.tenant_id = p.tenant_id
+        WHERE o.status = 'COMPLETED'
+        GROUP BY p.sku
+        ORDER BY revenue DESC
+        LIMIT 10
+    """)
                 .getResultList();
     }
 
